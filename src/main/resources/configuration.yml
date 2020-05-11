@@ -8,7 +8,6 @@ dbConfig:
     - table1
     - table2
     - table3
-  query: "CUSTOMER_ID=2"
 kafkaConfig:
   host: "TEST:9092"
   inputTopic: input

@@ -13,8 +13,7 @@ case class DbConfig(url: String,
                     driver: String,
                     user: String,
                     password: String,
-                    tables: List[String],
-                    query: String)
+                    tables: List[String])
 
 case class kafkaConsumer(host: String,
                          inputTopic: String,
