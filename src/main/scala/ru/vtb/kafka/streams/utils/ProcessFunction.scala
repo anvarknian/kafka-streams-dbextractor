@@ -1,6 +1,8 @@
 package ru.vtb.kafka.streams.utils
 
-import com.google.gson.Gson
+import cats.instances.map
+import spray.json._
+import DefaultJsonProtocol._
 import oracle.jdbc.pool.OracleDataSource
 import org.slf4j.LoggerFactory
 
@@ -59,9 +61,8 @@ class ProcessFunction(configuration: Configuration, customerID: String) {
   }
 
   def run(): String = {
-    val allTables = tables.map(table => table -> queryDatabase(table)).toMap
-    val gson = new Gson
-    val jsonString = gson.toJson(allTables)
-    jsonString
+    var tableMap: Map[String, Map[String, String]] = Map.empty
+    tables.map(table => tableMap + (table -> queryDatabase(table)))
+    tableMap.toJson.prettyPrint
   }
 }
