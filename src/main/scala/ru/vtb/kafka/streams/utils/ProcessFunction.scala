@@ -1,6 +1,5 @@
 package ru.vtb.kafka.streams.utils
 
-import cats.instances.map
 import spray.json._
 import DefaultJsonProtocol._
 import oracle.jdbc.pool.OracleDataSource
@@ -61,8 +60,7 @@ class ProcessFunction(configuration: Configuration, customerID: String) {
   }
 
   def run(): String = {
-    var tableMap: Map[String, Map[String, String]] = Map.empty
-    tables.map(table => tableMap + (table -> queryDatabase(table)))
-    tableMap.toJson.prettyPrint
+    val allTables: Map[String, List[Map[String, String]]] = tables.map(table => table -> queryDatabase(table)).toMap
+    allTables.toJson.compactPrint
   }
 }
