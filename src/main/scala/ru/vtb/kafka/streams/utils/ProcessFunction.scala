@@ -1,7 +1,5 @@
 package ru.vtb.kafka.streams.utils
 
-import spray.json._
-import DefaultJsonProtocol._
 import oracle.jdbc.pool.OracleDataSource
 import org.slf4j.LoggerFactory
 
@@ -59,8 +57,26 @@ class ProcessFunction(configuration: Configuration, customerID: String) {
     fullTable.toList
   }
 
+  def toJson(json: Map[String, Any]): String = {
+
+    def parse(elem: (String, Any)): String = elem match {
+      case (a: String, b: Map[String, _]) => "\"" + a + "\"" + ":" + toJson(b) + ""
+      case (a: String, b: Boolean) => "\"" + a + "\"" + ":" + b.toString
+      case (a: String, b: Int) => "\"" + a + "\"" + ":" + b.toString
+      case (a: String, b: Double) => "\"" + a + "\"" + ":" + b.toString
+      case (a: String, b: String) => "\"" + a + "\"" + ":\"" + b + "\""
+    }
+
+    val assocs = json.map {
+      case (key, value) => parse((key, value))
+    }
+
+    "{\n" + assocs.mkString(", \n") + "}"
+
+  }
+
   def run(): String = {
     val allTables: Map[String, List[Map[String, String]]] = tables.map(table => table -> queryDatabase(table)).toMap
-    allTables.toJson.compactPrint
+    toJson(allTables)
   }
 }

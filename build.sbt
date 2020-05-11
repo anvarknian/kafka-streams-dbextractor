@@ -20,7 +20,6 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % "0.10.1",
   "com.oracle.ojdbc" % "ojdbc8" % "19.3.0.0",
   "org.apache.httpcomponents" % "httpclient" % "4.5.6",
-  "io.spray" %% "spray-json" % "1.3.5",
   "org.apache.kafka" %% "kafka-streams-scala" % kafkfaVersion,
   "javax.ws.rs" % "javax.ws.rs-api" % "2.1" artifacts (Artifact("javax.ws.rs-api", "jar", "jar")), // this is a workaround for https://github.com/jax-rs/api/issues/571
   "org.scalatest" %% "scalatest" % "3.0.1" % Test)
