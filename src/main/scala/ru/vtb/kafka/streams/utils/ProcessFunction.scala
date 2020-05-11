@@ -75,11 +75,16 @@ class ProcessFunction(configuration: Configuration, customerID: String) {
   }
 
   def run(): String = {
+    val start = Instant.now()
     val allTables: Map[String, List[Map[String, String]]] = TABLES.map(table => table -> queryDatabase(table)).toMap
     con.close()
     if (con.isClosed()) {
       logger.info(s"Successfully closed Connection to $URL")
     }
-    toJson(allTables)
+    val json = toJson(allTables)
+    val end = Instant.now()
+    val diffInSecs = ChronoUnit.SECONDS.between(start, end)
+    logger.info(s"Successfully queried all tables, the operation took $diffInSecs seconds.")
+    json
   }
 }
