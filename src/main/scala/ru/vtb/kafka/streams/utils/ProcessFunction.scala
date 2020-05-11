@@ -60,7 +60,7 @@ class ProcessFunction(configuration: Configuration, customerID: String) {
     }
     val end = Instant.now()
     val diffInSecs = ChronoUnit.SECONDS.between(start, end)
-    logger.info(s"Querying table '$table' took: $diffInSecs")
+    logger.info(s"Querying table '$table' took $diffInSecs seconds.")
     fullTable.toList
 
   }
