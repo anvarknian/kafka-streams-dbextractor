@@ -57,22 +57,13 @@ class ProcessFunction(configuration: Configuration, customerID: String) {
     fullTable.toList
   }
 
-  def toJson(json: Map[String, Any]): String = {
-
-    def parse(elem: (String, Any)): String = elem match {
-      case (a: String, b: Map[String, _]) => "\"" + a + "\"" + ":" + toJson(b) + ""
-      case (a: String, b: Boolean) => "\"" + a + "\"" + ":" + b.toString
-      case (a: String, b: Int) => "\"" + a + "\"" + ":" + b.toString
-      case (a: String, b: Double) => "\"" + a + "\"" + ":" + b.toString
-      case (a: String, b: String) => "\"" + a + "\"" + ":\"" + b + "\""
-    }
-
-    val assocs = json.map {
-      case (key, value) => parse((key, value))
-    }
-
-    "{\n" + assocs.mkString(", \n") + "}"
-
+  def toJson(query: Any): String = query match {
+    case m: Map[String, Any] => s"{${m.map(toJson(_)).mkString(",")}}"
+    case t: (String, Any) => s""""${t._1}":${toJson(t._2)}"""
+    case ss: Seq[Any] => s"""[${ss.map(toJson(_)).mkString(",")}]"""
+    case s: String => s""""$s""""
+    case null => "null"
+    case _ => query.toString
   }
 
   def run(): String = {
